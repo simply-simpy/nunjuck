@@ -1,6 +1,7 @@
 const gulp = require('gulp');
 const nunjucksRender = require('gulp-nunjucks-render');
 const connect = require('gulp-connect');
+const sass = require('gulp-sass');
 
 gulp.task('nunjuckTask', function () {
   return gulp.src('src/templates/*.html')
@@ -25,11 +26,28 @@ gulp.task('connect', function () {
   });
 });
 
+gulp.task('sass', function () {
+  return gulp.src('./src/templates/scss/main.scss')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest('dist/css'))
+    .pipe(connect.reload());
+});
+
+
+gulp.task('copyJs', function() {
+  return gulp.src('src/templates/js/**/**')
+    .pipe(gulp.dest('dist/js'))
+});
+
 gulp.task('watch', function(){
   return gulp.watch('src/templates/**/*', gulp.series('nunjuckTask', 'moveSourceTask'));
 });
 
-gulp.task('default', gulp.parallel('connect','nunjuckTask', 'moveSourceTask', 'watch', function (done) {
+gulp.task('sass:watch', function () {
+  return gulp.watch('src/templates/scss/**/*.scss', gulp.series('sass'));
+});
+
+gulp.task('default', gulp.parallel('connect','nunjuckTask', 'moveSourceTask', 'watch', 'sass:watch'), function (done) {
   done();
-}));
+});
 
