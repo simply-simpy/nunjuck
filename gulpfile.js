@@ -9,7 +9,6 @@ gulp.task('nunjuckTask', function () {
       path: ['src/templates/']
     }))
     .pipe(gulp.dest('dist'))
-    .pipe(gulp.dest('child/dist'))
     .pipe(connect.reload())
 });
 
@@ -35,7 +34,7 @@ gulp.task('js', function() {
 });
 
 gulp.task('watch', function(){
-  return gulp.watch('src/templates/**/*', gulp.series('nunjuckTask', 'moveSourceTask'));
+  return gulp.watch('src/templates/**/*', gulp.series('nunjuckTask'));
 });
 
 gulp.task('sass:watch', function () {
